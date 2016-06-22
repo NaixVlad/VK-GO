@@ -1,12 +1,13 @@
 //
 //  AppDelegate.m
-//  VK-GO
+//  VK
 //
-//  Created by Vladislav Andreev on 18.06.16.
+//  Created by Vladislav Andreev on 03.06.16.
 //  Copyright © 2016 Vladislav Andreev. All rights reserved.
 //
 
 #import "AppDelegate.h"
+#import <VKSdk.h>
 
 @interface AppDelegate ()
 
@@ -16,7 +17,10 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+
+    //[[VKSdk initializeWithAppId:@"5334722"] registerDelegate:VAVk];
+
+    
     return YES;
 }
 
@@ -40,6 +44,11 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
+    [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
+    return YES;
 }
 
 @end

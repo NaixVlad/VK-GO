@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "VKSdk.h"
+#import "VKUser.h"
 
 @interface ViewController ()
 
@@ -24,4 +26,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)buttonClicked:(UIButton *)sender {
+    
+    VKUser *user = [[VKUser alloc] init];
+    
+    if ([[VKSdk accessToken] localUser]) {
+        
+        user = [[VKSdk accessToken] localUser];
+        
+        self.userName.text = user.first_name;
+
+    }
+
+}
 @end

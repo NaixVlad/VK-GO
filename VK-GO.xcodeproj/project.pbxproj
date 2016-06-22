@@ -13,9 +13,24 @@
 		835A13341D15702100AF0996 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835A13321D15702100AF0996 /* Main.storyboard */; };
 		835A13361D15702100AF0996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 835A13351D15702100AF0996 /* Assets.xcassets */; };
 		835A13391D15702100AF0996 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 835A13371D15702100AF0996 /* LaunchScreen.storyboard */; };
+		835A13481D1571FC00AF0996 /* VAApiCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13411D1571FC00AF0996 /* VAApiCallViewController.m */; };
+		835A13491D1571FC00AF0996 /* VASidebarTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13431D1571FC00AF0996 /* VASidebarTableViewController.m */; };
+		835A134A1D1571FC00AF0996 /* VAStartScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13451D1571FC00AF0996 /* VAStartScreen.m */; };
+		835A134B1D1571FC00AF0996 /* VATestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13471D1571FC00AF0996 /* VATestViewController.m */; };
+		835A134E1D17BB3500AF0996 /* VAFriendsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A134D1D17BB3500AF0996 /* VAFriendsController.m */; };
+		835A13541D18864800AF0996 /* VAAudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13531D18864800AF0996 /* VAAudioController.m */; };
+		835A13561D19488600AF0996 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 835A13551D19488600AF0996 /* AVFoundation.framework */; };
+		835A13591D19ABE900AF0996 /* VAAudioPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13581D19ABE900AF0996 /* VAAudioPlayerController.m */; };
+		835A135C1D1A885F00AF0996 /* VAAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135B1D1A885E00AF0996 /* VAAudioQueue.m */; };
+		835A13601D1A89AB00AF0996 /* VAAudioPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135F1D1A89AB00AF0996 /* VAAudioPlayback.m */; };
+		835A13641D1A8D6200AF0996 /* NSTimer+VAAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */; };
+		835A13671D1A933700AF0996 /* VKAudio+VAAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13661D1A933700AF0996 /* VKAudio+VAAudio.m */; };
+		9705F24B234947ABBF282CF8 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FB3175322AAF8ACEE2FD06BB /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2CA8E5B63D4B1EF74D2BC8A1 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		5FFBBEEB3FEA891616EDABB5 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		835A13261D15702100AF0996 /* VK-GO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "VK-GO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		835A132A1D15702100AF0996 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		835A132C1D15702100AF0996 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -26,6 +41,31 @@
 		835A13351D15702100AF0996 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		835A13381D15702100AF0996 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		835A133A1D15702100AF0996 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		835A13401D1571FC00AF0996 /* VAApiCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAApiCallViewController.h; sourceTree = "<group>"; };
+		835A13411D1571FC00AF0996 /* VAApiCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAApiCallViewController.m; sourceTree = "<group>"; };
+		835A13421D1571FC00AF0996 /* VASidebarTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VASidebarTableViewController.h; sourceTree = "<group>"; };
+		835A13431D1571FC00AF0996 /* VASidebarTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VASidebarTableViewController.m; sourceTree = "<group>"; };
+		835A13441D1571FC00AF0996 /* VAStartScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAStartScreen.h; sourceTree = "<group>"; };
+		835A13451D1571FC00AF0996 /* VAStartScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAStartScreen.m; sourceTree = "<group>"; };
+		835A13461D1571FC00AF0996 /* VATestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VATestViewController.h; sourceTree = "<group>"; };
+		835A13471D1571FC00AF0996 /* VATestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VATestViewController.m; sourceTree = "<group>"; };
+		835A134C1D17BB3400AF0996 /* VAFriendsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAFriendsController.h; sourceTree = "<group>"; };
+		835A134D1D17BB3500AF0996 /* VAFriendsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAFriendsController.m; sourceTree = "<group>"; };
+		835A13521D18864800AF0996 /* VAAudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudioController.h; sourceTree = "<group>"; };
+		835A13531D18864800AF0996 /* VAAudioController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudioController.m; sourceTree = "<group>"; };
+		835A13551D19488600AF0996 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		835A13571D19ABE900AF0996 /* VAAudioPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudioPlayerController.h; sourceTree = "<group>"; };
+		835A13581D19ABE900AF0996 /* VAAudioPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudioPlayerController.m; sourceTree = "<group>"; };
+		835A135A1D1A885E00AF0996 /* VAAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudioQueue.h; sourceTree = "<group>"; };
+		835A135B1D1A885E00AF0996 /* VAAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudioQueue.m; sourceTree = "<group>"; };
+		835A135E1D1A89AB00AF0996 /* VAAudioPlayback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudioPlayback.h; sourceTree = "<group>"; };
+		835A135F1D1A89AB00AF0996 /* VAAudioPlayback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudioPlayback.m; sourceTree = "<group>"; };
+		835A13611D1A8C4000AF0996 /* VAAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAAudioManager.h; sourceTree = "<group>"; };
+		835A13621D1A8D6200AF0996 /* NSTimer+VAAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+VAAudioManager.h"; sourceTree = "<group>"; };
+		835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+VAAudioManager.m"; sourceTree = "<group>"; };
+		835A13651D1A933700AF0996 /* VKAudio+VAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VKAudio+VAAudio.h"; sourceTree = "<group>"; };
+		835A13661D1A933700AF0996 /* VKAudio+VAAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "VKAudio+VAAudio.m"; sourceTree = "<group>"; };
+		FB3175322AAF8ACEE2FD06BB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +73,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835A13561D19488600AF0996 /* AVFoundation.framework in Frameworks */,
+				9705F24B234947ABBF282CF8 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5867345B935915F593770866 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5FFBBEEB3FEA891616EDABB5 /* Pods.debug.xcconfig */,
+				2CA8E5B63D4B1EF74D2BC8A1 /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		835A131D1D15702100AF0996 = {
 			isa = PBXGroup;
 			children = (
 				835A13281D15702100AF0996 /* VK-GO */,
 				835A13271D15702100AF0996 /* Products */,
+				5867345B935915F593770866 /* Pods */,
+				DBAEC900CC04405E9C2A8324 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +113,21 @@
 			children = (
 				835A132C1D15702100AF0996 /* AppDelegate.h */,
 				835A132D1D15702100AF0996 /* AppDelegate.m */,
+				835A13441D1571FC00AF0996 /* VAStartScreen.h */,
+				835A13451D1571FC00AF0996 /* VAStartScreen.m */,
+				835A13421D1571FC00AF0996 /* VASidebarTableViewController.h */,
+				835A13431D1571FC00AF0996 /* VASidebarTableViewController.m */,
+				835A13401D1571FC00AF0996 /* VAApiCallViewController.h */,
+				835A13411D1571FC00AF0996 /* VAApiCallViewController.m */,
+				835A13461D1571FC00AF0996 /* VATestViewController.h */,
+				835A13471D1571FC00AF0996 /* VATestViewController.m */,
+				835A134C1D17BB3400AF0996 /* VAFriendsController.h */,
+				835A134D1D17BB3500AF0996 /* VAFriendsController.m */,
+				835A13521D18864800AF0996 /* VAAudioController.h */,
+				835A13531D18864800AF0996 /* VAAudioController.m */,
+				835A135D1D1A895200AF0996 /* Audio */,
+				835A13571D19ABE900AF0996 /* VAAudioPlayerController.h */,
+				835A13581D19ABE900AF0996 /* VAAudioPlayerController.m */,
 				835A132F1D15702100AF0996 /* ViewController.h */,
 				835A13301D15702100AF0996 /* ViewController.m */,
 				835A13321D15702100AF0996 /* Main.storyboard */,
@@ -79,6 +147,31 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		835A135D1D1A895200AF0996 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				835A13611D1A8C4000AF0996 /* VAAudioManager.h */,
+				835A135E1D1A89AB00AF0996 /* VAAudioPlayback.h */,
+				835A135F1D1A89AB00AF0996 /* VAAudioPlayback.m */,
+				835A135A1D1A885E00AF0996 /* VAAudioQueue.h */,
+				835A135B1D1A885E00AF0996 /* VAAudioQueue.m */,
+				835A13651D1A933700AF0996 /* VKAudio+VAAudio.h */,
+				835A13661D1A933700AF0996 /* VKAudio+VAAudio.m */,
+				835A13621D1A8D6200AF0996 /* NSTimer+VAAudioManager.h */,
+				835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */,
+			);
+			name = Audio;
+			sourceTree = "<group>";
+		};
+		DBAEC900CC04405E9C2A8324 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				835A13551D19488600AF0996 /* AVFoundation.framework */,
+				FB3175322AAF8ACEE2FD06BB /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -86,9 +179,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 835A133D1D15702100AF0996 /* Build configuration list for PBXNativeTarget "VK-GO" */;
 			buildPhases = (
+				C0BF93F95C5C268ED760A399 /* Check Pods Manifest.lock */,
 				835A13221D15702100AF0996 /* Sources */,
 				835A13231D15702100AF0996 /* Frameworks */,
 				835A13241D15702100AF0996 /* Resources */,
+				E3AD657488750865074D7F53 /* Embed Pods Frameworks */,
+				764FE527C308B1D32292A3AD /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -145,14 +241,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		764FE527C308B1D32292A3AD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C0BF93F95C5C268ED760A399 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		E3AD657488750865074D7F53 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		835A13221D15702100AF0996 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				835A13601D1A89AB00AF0996 /* VAAudioPlayback.m in Sources */,
+				835A13481D1571FC00AF0996 /* VAApiCallViewController.m in Sources */,
+				835A134E1D17BB3500AF0996 /* VAFriendsController.m in Sources */,
+				835A13641D1A8D6200AF0996 /* NSTimer+VAAudioManager.m in Sources */,
 				835A13311D15702100AF0996 /* ViewController.m in Sources */,
+				835A135C1D1A885F00AF0996 /* VAAudioQueue.m in Sources */,
 				835A132E1D15702100AF0996 /* AppDelegate.m in Sources */,
+				835A134B1D1571FC00AF0996 /* VATestViewController.m in Sources */,
+				835A13491D1571FC00AF0996 /* VASidebarTableViewController.m in Sources */,
+				835A13591D19ABE900AF0996 /* VAAudioPlayerController.m in Sources */,
 				835A132B1D15702100AF0996 /* main.m in Sources */,
+				835A13671D1A933700AF0996 /* VKAudio+VAAudio.m in Sources */,
+				835A134A1D1571FC00AF0996 /* VAStartScreen.m in Sources */,
+				835A13541D18864800AF0996 /* VAAudioController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,6 +417,7 @@
 		};
 		835A133E1D15702100AF0996 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5FFBBEEB3FEA891616EDABB5 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "VK-GO/Info.plist";
@@ -273,6 +429,7 @@
 		};
 		835A133F1D15702100AF0996 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2CA8E5B63D4B1EF74D2BC8A1 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "VK-GO/Info.plist";
@@ -301,6 +458,7 @@
 				835A133F1D15702100AF0996 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
