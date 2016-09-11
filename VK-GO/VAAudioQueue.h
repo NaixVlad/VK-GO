@@ -9,34 +9,39 @@
 #import <Foundation/Foundation.h>
 
 #import "VAAudioPlayback.h"
-#import "VKAudio.h"
+#import "VAAudio.h"
 
 @interface VAAudioQueue : NSObject
 
-typedef void (^feedbackBlock)(VKAudio *item);
-typedef void (^itemFinishedBlock)(VKAudio *nextItem);
+typedef void (^feedbackBlock)(VAAudio *item);
+typedef void (^itemFinishedBlock)(VAAudio *nextItem);
 
--(id)initWithItems:(NSArray *)items;
+
++ (VAAudioQueue*) sharedQueueManager;
 
 @property (nonatomic) VAAudioStatus status;
 
--(void)addItem:(VKAudio *)item;
--(void)addItem:(VKAudio *)item atIndex:(NSInteger)index;
--(void)removeItem:(VKAudio *)item;
--(void)removeItemAtIndex:(NSInteger)index;
--(void)clearQueue;
 
--(void)playCurrentItem;
--(void)pause;
--(void)playNextItem;
--(void)playPreviousItem;
--(void)playItem:(VKAudio *)item;
--(void)playItemAtIndex:(NSInteger)index;
+- (void) setQueueItems:(NSMutableArray *)items;
+- (void) addItem:(VAAudio *)item;
+- (void) addItem:(VAAudio *)item atIndex:(NSInteger)index;
+- (void) removeItem:(VAAudio *)item;
+- (void) removeItemAtIndex:(NSInteger)index;
+- (void) clearQueue;
 
--(VKAudio *)getCurrentItem;
--(NSInteger)indexOfCurrentItem;
+- (void) playCurrentItem;
+- (void) pause;
+- (void) playNextItem;
+- (void) playPreviousItem;
+- (void) playItem:(VAAudio *)item;
+- (void) playItemAtIndex:(NSInteger)index;
+- (void) playAtSecond: (NSInteger) second;
+- (BOOL) isPlaying;
 
--(void)listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(itemFinishedBlock)finishedBlock;
+- (VAAudio *) getCurrentItem;
+- (NSInteger) indexOfCurrentItem;
+
+- (void) listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(itemFinishedBlock)finishedBlock;
 
 
 @end

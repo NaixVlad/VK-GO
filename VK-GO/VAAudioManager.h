@@ -12,5 +12,5 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 #import "VAAudioPlayback.h"
-#import "VKAudio.h"
+#import "VAAudio.h"
 #import "VAAudioQueue.h"

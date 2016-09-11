@@ -11,9 +11,9 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#import "VKAudio.h"
+#import "VAAudio.h"
 
-typedef void (^feedbackBlock)(VKAudio *item);
+typedef void (^feedbackBlock)(VAAudio *item);
 typedef void (^finishedBlock)(void);
 
 @interface VAAudioPlayback : NSObject
@@ -32,21 +32,23 @@ typedef NS_ENUM(NSInteger, VAAudioStatus) {
     VAAudioStatusFinished
 };
 
--(id)initWithItem:(VKAudio *)item;
+- (instancetype)init;
 
 @property (nonatomic) AVPlayer *player;
 @property (nonatomic) VAAudioStatus status;
 
-@property (nonatomic) VKAudio *currentItem;
+@property (nonatomic) VAAudio *currentItem;
 
--(void)play;
--(void)pause;
--(void)restart;
+- (void)setUpItem:(VAAudio *)item;
+- (BOOL)isPlaying;
+- (void)play;
+- (void)pause;
+- (void)restart;
 
--(void)playAtSecond:(NSInteger)second;
+- (void)playAtSecond:(NSInteger)second;
 
--(void)listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(finishedBlock)finishedBlock;
--(NSDictionary *)statusDictionary;
+- (void)listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(finishedBlock)finishedBlock;
+- (NSDictionary *)statusDictionary;
 
 
 @end

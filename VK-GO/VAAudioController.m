@@ -7,31 +7,38 @@
 //
 
 #import "VAAudioController.h"
-#import "SWRevealViewController.h"
-#import "VKRequest.h"
 #import "VKApi.h"
+#import "VAAudioManager.h"
 
 
 @interface VAAudioController ()
 
+@property(strong, nonatomic) VKUser* user;
+
 @end
 
+
+
 @implementation VAAudioController
+
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if ( revealViewController )
-    {
-        [self.sidebarButton setTarget: self.revealViewController];
-        [self.sidebarButton setAction: @selector( revealToggle: )];
-        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    }
-    
-    [self loadAudios];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self loadAudios];
+    });
     
     
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(changePlayIcon:) name:@"VAAudioChange" object:nil];
+                  
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -39,9 +46,42 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - UI
+
+- (void) changePlayIcon: (NSNotification *) notification {
+    
+    static NSInteger row;
+    
+    NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:row inSection: 0];
+    
+    [self.tableView deselectRowAtIndexPath:oldIndexPath animated:YES];
+    
+    UITableViewCell *oldCell = [self.tableView cellForRowAtIndexPath:oldIndexPath];
+    oldCell.imageView.image = [UIImage imageNamed:@"playButton"];
+    
+    VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
+    
+    row = [queue indexOfCurrentItem];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection: 0];
+    
+    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+    
+    UITableViewCell *newCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    newCell.imageView.image = [UIImage imageNamed:@"pauseButton"];
+    
+
+}
+
+#pragma mark - Networking
+
 - (void)loadAudios {
-    __block NSArray *audiosArray;
-    VKRequest *request = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : @70194802}];
+    
+    __block NSMutableArray *audiosArray;
+    
+    VKUser *localUser = [[VKSdk accessToken] localUser];
+    
+    VKRequest *request = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : localUser.id}];
     request.waitUntilDone = YES;
     
     [request executeWithResultBlock:^(VKResponse *response) {
@@ -49,28 +89,28 @@
         audiosArray = [[NSMutableArray alloc] initWithArray:[response.json objectForKey:@"items"]];
 
     } errorBlock:^(NSError *error) {
-        NSLog(@"%@", error);
+        NSLog(@"%@", error.localizedDescription);
     }];
     
-    self.audios = [[VKAudios alloc] initWithArray:audiosArray objectClass:[VKAudio class]];
+    
+    self.audios = [[VKAudios alloc] initWithArray:audiosArray objectClass:[VAAudio class]];
+    
+    [[VAAudioQueue sharedQueueManager] setQueueItems: self.audios.items];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+
     
 }
-
-
-
 
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    return 1;
-    
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return self.audios.count;
+    return [self.audios count];
     
 }
 
@@ -88,6 +128,8 @@
     
     cell.detailTextLabel.text = audio.artist;
     
+    cell.imageView.image = [UIImage imageNamed:@"playButton"];
+    
     return cell;
 }
 
@@ -95,57 +137,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    [[VAAudioQueue sharedQueueManager] playItemAtIndex:indexPath.row];
     
+    /*
     VKAudio *selectedAudio = [[VKAudio alloc] init];
     
     selectedAudio = [self.audios objectAtIndex:indexPath.row];
     
     NSString *stringURL = selectedAudio.url;
     
-    NSURL *url = [NSURL URLWithString: selectedAudio.url];
+    NSURL *url = [NSURL URLWithString: stringURL];
     
-    [self playselectedsong:url];
+    [self playselectedsong:url];*/
 
-}
-
-
--(void)playselectedsong:(NSURL *)url{
-    
-    AVPlayer *player = [[AVPlayer alloc]initWithURL:url];
-    self.songPlayer = player;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(playerItemDidReachEnd:)
-                                                 name:AVPlayerItemDidPlayToEndTimeNotification
-                                               object:[player currentItem]];
-    [self.songPlayer addObserver:self forKeyPath:@"status" options:0 context:nil];
-    //[NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(updateProgress:) userInfo:nil repeats:YES];
-    
-    
-    
-}
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    
-    if (object == self.songPlayer && [keyPath isEqualToString:@"status"]) {
-        if (self.songPlayer.status == AVPlayerStatusFailed) {
-            NSLog(@"AVPlayer Failed");
-            
-        } else if (self.songPlayer.status == AVPlayerStatusReadyToPlay) {
-            NSLog(@"AVPlayerStatusReadyToPlay");
-            [self.songPlayer play];
-            
-            
-        } else if (self.songPlayer.status == AVPlayerItemStatusUnknown) {
-            NSLog(@"AVPlayer Unknown");
-            
-        }
-    }
-}
-
-- (void)playerItemDidReachEnd:(NSNotification *)notification {
-    
-    //  code here to play next sound file
-    
 }
 
 
@@ -183,14 +189,18 @@
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    //VAAudioPlayerController *vc = [segue destinationViewController];
+    
+    //vc.queue = [[VAAudioQueue alloc]initWithItems:self.audios.items];
+    
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
 }
-*/
+
 
 @end

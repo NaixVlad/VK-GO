@@ -12,6 +12,5 @@
 @interface VAFriendsController : UITableViewController
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton;
-@property(nonatomic) VKUsersArray *friends;
 
 @end

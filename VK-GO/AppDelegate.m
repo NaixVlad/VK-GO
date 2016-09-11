@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import <VKSdk.h>
+#import "VKSdk.h"
 
 @interface AppDelegate ()
 
@@ -49,6 +49,40 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
     [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
     return YES;
+}
+
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    // Get topmost/visible view controller
+    UIViewController *currentViewController = [self topViewController];
+    
+    // Check whether it implements a dummy methods called canRotate
+    if ([currentViewController respondsToSelector:@selector(canRotate)]) {
+        // Unlock landscape view orientations for this view controller
+        return UIInterfaceOrientationMaskAllButUpsideDown;
+    }
+    
+    // Only allow portrait (standard behaviour)
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIViewController*)topViewController {
+    return [self topViewControllerWithRootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+}
+
+- (UIViewController*)topViewControllerWithRootViewController:(UIViewController*)rootViewController {
+    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController* tabBarController = (UITabBarController*)rootViewController;
+        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+    } else if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController* navigationController = (UINavigationController*)rootViewController;
+        return [self topViewControllerWithRootViewController:navigationController.visibleViewController];
+    } else if (rootViewController.presentedViewController) {
+        UIViewController* presentedViewController = rootViewController.presentedViewController;
+        return [self topViewControllerWithRootViewController:presentedViewController];
+    } else {
+        return rootViewController;
+    }
 }
 
 @end

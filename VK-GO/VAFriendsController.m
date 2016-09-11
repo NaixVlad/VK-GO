@@ -11,54 +11,41 @@
 #import "VKApi.h"
 #import "VKRequest.h"
 #import "VKUtil.h"
-#import "SWRevealViewController.h"
+#import "UIImageView+AFNetworking.h"
 
-static NSString *const FRIENDS_FIELDS = @"first_name,last_name, photo_50";
+static NSString *const Friends_Fields = @"first_name,last_name, photo_50";
 
 @interface VAFriendsController ()
+
+@property(nonatomic) VKUsersArray *friends;
 
 @end
 
 @implementation VAFriendsController
 
--(void)viewWillAppear:(BOOL)animated {
-    
-    [super viewWillAppear:YES];
-    
-}
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    SWRevealViewController *revealViewController = self.revealViewController;
-    if ( revealViewController )
-    {
-        [self.sidebarButton setTarget: self.revealViewController];
-        [self.sidebarButton setAction: @selector( revealToggle: )];
-        [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    }
-    
-    self.friends = [self loadUsers];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self loadFriends];
+    });
 
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(__unused UITableView *)tableView {
 
     return 1;
     
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
+
     NSLog(@"%lu", (unsigned long)self.friends.count);
     
     return self.friends.count;
@@ -70,7 +57,9 @@ static NSString *const FRIENDS_FIELDS = @"first_name,last_name, photo_50";
     
     static NSString* cellIdentifier = @"friendCell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    NSLog(@"%lu", indexPath.row);
     
     VKUser *friend = [[VKUser alloc] init];
     
@@ -79,29 +68,59 @@ static NSString *const FRIENDS_FIELDS = @"first_name,last_name, photo_50";
     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     cell.textLabel.text = [friend.first_name stringByAppendingFormat: @" %@", friend.last_name];
     
+    NSLog(@"%@", [friend.first_name stringByAppendingFormat: @" %@", friend.last_name]);
+    NSLog(@"%@", cell.textLabel.text);
+    
     NSURL *url = [NSURL URLWithString:friend.photo_50];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    UIImage *img = [[UIImage alloc] initWithData:data];
 
-    cell.imageView.image = [img vks_roundCornersImage:15.f resultSize:CGSizeMake(50, 50)];
+    __weak UITableViewCell *weakCell = cell;
+    
+    cell.imageView.image = nil;
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    [cell.imageView setImageWithURLRequest:request
+                          placeholderImage: [UIImage imageNamed:@"defaultFriend"]
+                                   success:^(NSURLRequest * request, NSHTTPURLResponse * response, UIImage * image) {
+                                       weakCell.imageView.image = image;
+                                       weakCell.imageView.image = [image vks_roundCornersImage:25.f resultSize:CGSizeMake(50, 50)];
+                                       [weakCell layoutSubviews];
+                                   } failure:^(NSURLRequest * request, NSHTTPURLResponse * response, NSError * error) {
+                                       NSLog(@"%@", error.localizedDescription);
+                                   }];
 
     return cell;
 
 }
 
+#pragma mark - Networking
 
-- (VKUsersArray *)loadUsers {
+- (void)loadFriends {
+    
     __block VKUsersArray *users;
-    VKRequest *request = [[VKApi friends] get:@{VK_API_FIELDS : FRIENDS_FIELDS}];
+    VKRequest *request = [[VKApi friends] get:@{VK_API_FIELDS : Friends_Fields}];
     request.waitUntilDone = YES;
     
     [request executeWithResultBlock:^(VKResponse *response) {
         users = response.parsedModel;
     }                    errorBlock:nil];
     
+    self.friends = users;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 
-    return users;
 }
+
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
+
 
 /*
 // Override to support conditional editing of the table view.
@@ -137,14 +156,14 @@ static NSString *const FRIENDS_FIELDS = @"first_name,last_name, photo_50";
 }
 */
 
-/*
+
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    
+    //VAAudioPlayerController *vc = [segue destinationViewController];
+    //vc.queue = [[VAAudioQueue alloc]initWithItems:self.audios.items];
+    
 }
-*/
 
 @end

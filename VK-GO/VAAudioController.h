@@ -12,9 +12,6 @@
 
 @interface VAAudioController : UITableViewController
 
-@property (weak, nonatomic) IBOutlet UIBarButtonItem *sidebarButton;
-@property(nonatomic) VKAudios *audios;
-@property(nonatomic) AVPlayer *songPlayer;
-
+@property (nonatomic) VKAudios *audios;
 
 @end

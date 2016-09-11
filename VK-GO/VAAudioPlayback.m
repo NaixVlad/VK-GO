@@ -12,50 +12,60 @@
 
 @interface VAAudioPlayback ()
 
--(void)setUpItem:(VKAudio *)item;
-
-@property (nonatomic, strong) NSTimer *feedbackTimer;
+@property (nonatomic) NSTimer *feedbackTimer;
 
 @end
 
 @implementation VAAudioPlayback
 
-NSString * const AFSoundPlaybackStatus = @"status";
-NSString * const AFSoundStatusDuration = @"duration";
-NSString * const AFSoundStatusTimeElapsed = @"timeElapsed";
+NSString * const VAAudioPlaybackStatus = @"status";
+NSString * const VAAudioStatusDuration = @"duration";
+NSString * const VAAudioStatusTimeElapsed = @"timeElapsed";
+NSString * const VAAudioPlaybackFinishedNotification = @"kVASoundPlaybackFinishedNotification";
 
-NSString * const AFSoundPlaybackFinishedNotification = @"kAFSoundPlaybackFinishedNotification";
 
--(id)initWithItem:(VKAudio *)item {
-    
-    if (self == [super init]) {
-        
-        self.currentItem = item;
-        [self setUpItem:item];
-        
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
         self.status = VAAudioStatusNotStarted;
+
+        [self addObserver:self
+               forKeyPath:@"currentItem"
+                  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld
+                  context:NULL];
     }
-    
+
     return self;
 }
 
--(void)setUpItem:(VKAudio *)item {
+- (void)dealloc
+{
+    [self removeObserver:self forKeyPath:@"currentItem" context:NULL];
+}
+
+- (void)setUpItem:(VAAudio *)item {
     
-    self.player = [[AVPlayer alloc] initWithURL:item.url];
+    NSURL *url = [NSURL URLWithString: item.url];
+    self.player = [[AVPlayer alloc] initWithURL:url];
     [self.player play];
     self.player.actionAtItemEnd = AVPlayerActionAtItemEndPause;
     
     self.status = VAAudioStatusPlaying;
     
     self.currentItem = item;
-    self.currentItem.duration = (int)CMTimeGetSeconds(self.player.currentItem.asset.duration);
+    
+
+    
+    
+    //self.currentItem.duration = @(CMTimeGetSeconds(self.player.currentItem.asset.duration));
     
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
--(void)listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(finishedBlock)finishedBlock {
+- (void)listenFeedbackUpdatesWithBlock:(feedbackBlock)block andFinishedBlock:(finishedBlock)finishedBlock {
     
     CGFloat updateRate = 1;
     
@@ -73,7 +83,7 @@ NSString * const AFSoundPlaybackFinishedNotification = @"kAFSoundPlaybackFinishe
             block(self.currentItem);
         }
         
-        if (self.statusDictionary[AFSoundStatusDuration] == self.statusDictionary[AFSoundStatusTimeElapsed]) {
+        if (self.statusDictionary[VAAudioStatusDuration] == self.statusDictionary[VAAudioStatusTimeElapsed]) {
             
             [self.feedbackTimer pauseTimer];
             
@@ -146,6 +156,13 @@ NSString * const AFSoundPlaybackFinishedNotification = @"kAFSoundPlaybackFinishe
     return @{VAAudioStatusDuration: @((int)CMTimeGetSeconds(self.player.currentItem.asset.duration)),
              VAAudioStatusTimeElapsed: @((int)CMTimeGetSeconds(self.player.currentItem.currentTime)),
              VAAudioPlaybackStatus: @(self.status)};
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VAAudioChange" object:change];
+    
 }
 
 @end
