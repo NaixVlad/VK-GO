@@ -19,6 +19,7 @@
 		835A135C1D1A885F00AF0996 /* VAAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135B1D1A885E00AF0996 /* VAAudioQueue.m */; };
 		835A13601D1A89AB00AF0996 /* VAAudioPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135F1D1A89AB00AF0996 /* VAAudioPlayback.m */; };
 		835A13641D1A8D6200AF0996 /* NSTimer+VAAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */; };
+		83CEB9181D8693BC009084B9 /* VASettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB9171D8693BC009084B9 /* VASettingsController.m */; };
 		83F5BA101D1ADF0E00FEDD13 /* VAAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F5BA0F1D1ADF0E00FEDD13 /* VAAudio.m */; };
 		83F5BA121D1EF72F00FEDD13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83F5BA111D1EF72F00FEDD13 /* Assets.xcassets */; };
 		97B42611E83676BAF5A25E45 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F92817E5E45C682412A3A51 /* libPods.a */; };
@@ -51,6 +52,8 @@
 		835A13611D1A8C4000AF0996 /* VAAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAAudioManager.h; sourceTree = "<group>"; };
 		835A13621D1A8D6200AF0996 /* NSTimer+VAAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+VAAudioManager.h"; sourceTree = "<group>"; };
 		835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+VAAudioManager.m"; sourceTree = "<group>"; };
+		83CEB9161D8693BC009084B9 /* VASettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VASettingsController.h; sourceTree = "<group>"; };
+		83CEB9171D8693BC009084B9 /* VASettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VASettingsController.m; sourceTree = "<group>"; };
 		83F5BA0E1D1ADF0E00FEDD13 /* VAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudio.h; sourceTree = "<group>"; };
 		83F5BA0F1D1ADF0E00FEDD13 /* VAAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudio.m; sourceTree = "<group>"; };
 		83F5BA111D1EF72F00FEDD13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				835A134D1D17BB3500AF0996 /* VAFriendsController.m */,
 				835A13521D18864800AF0996 /* VAAudioController.h */,
 				835A13531D18864800AF0996 /* VAAudioController.m */,
+				83CEB9161D8693BC009084B9 /* VASettingsController.h */,
+				83CEB9171D8693BC009084B9 /* VASettingsController.m */,
 				835A13571D19ABE900AF0996 /* VAAudioPlayerController.h */,
 				835A13581D19ABE900AF0996 /* VAAudioPlayerController.m */,
 				835A135D1D1A895200AF0996 /* Audio */,
@@ -283,6 +288,7 @@
 				835A132B1D15702100AF0996 /* main.m in Sources */,
 				835A134A1D1571FC00AF0996 /* VAStartScreen.m in Sources */,
 				835A13541D18864800AF0996 /* VAAudioController.m in Sources */,
+				83CEB9181D8693BC009084B9 /* VASettingsController.m in Sources */,
 				83F5BA101D1ADF0E00FEDD13 /* VAAudio.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

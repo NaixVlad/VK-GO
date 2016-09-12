@@ -40,7 +40,6 @@ typedef NS_ENUM(NSInteger, VAAudioStatus) {
 @property (nonatomic) VAAudio *currentItem;
 
 - (void)setUpItem:(VAAudio *)item;
-- (BOOL)isPlaying;
 - (void)play;
 - (void)pause;
 - (void)restart;

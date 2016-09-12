@@ -7,13 +7,13 @@
 //
 
 #import "VAAudioController.h"
-#import "VKApi.h"
+
 #import "VAAudioManager.h"
 
 
 @interface VAAudioController ()
 
-@property(strong, nonatomic) VKUser* user;
+@property(strong, nonatomic) VKAudios *audios;
 
 @end
 
@@ -79,12 +79,16 @@
     
     __block NSMutableArray *audiosArray;
     
-    VKUser *localUser = [[VKSdk accessToken] localUser];
+    if (!self.audiosRequest) {
+        
+        VKUser *localUser = [[VKSdk accessToken] localUser];
+        self.audiosRequest = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : localUser.id}];
+        
+    }
     
-    VKRequest *request = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : localUser.id}];
-    request.waitUntilDone = YES;
+    self.audiosRequest.waitUntilDone = YES;
     
-    [request executeWithResultBlock:^(VKResponse *response) {
+    [self.audiosRequest executeWithResultBlock:^(VKResponse *response) {
         
         audiosArray = [[NSMutableArray alloc] initWithArray:[response.json objectForKey:@"items"]];
 
@@ -101,7 +105,6 @@
         [self.tableView reloadData];
     });
 
-    
 }
 
 

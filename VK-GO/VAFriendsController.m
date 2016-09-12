@@ -12,12 +12,14 @@
 #import "VKRequest.h"
 #import "VKUtil.h"
 #import "UIImageView+AFNetworking.h"
+#import "VAAudioController.h"
 
 static NSString *const Friends_Fields = @"first_name,last_name, photo_50";
 
 @interface VAFriendsController ()
 
-@property(nonatomic) VKUsersArray *friends;
+@property (strong, nonatomic) VKUsersArray *friends;
+@property (strong, nonatomic) VKUser *selectedFriend;
 
 @end
 
@@ -118,6 +120,8 @@ static NSString *const Friends_Fields = @"first_name,last_name, photo_50";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    self.selectedFriend = [self.friends objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"friendMusic" sender:nil];
     
 }
 
@@ -161,8 +165,8 @@ static NSString *const Friends_Fields = @"first_name,last_name, photo_50";
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
-    //VAAudioPlayerController *vc = [segue destinationViewController];
-    //vc.queue = [[VAAudioQueue alloc]initWithItems:self.audios.items];
+    VAAudioController *vc = [segue destinationViewController];
+    vc.audiosRequest = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : self.selectedFriend.id}];
     
 }
 

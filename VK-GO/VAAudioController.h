@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "VKAudio.h"
+#import "VKApi.h"
 @import AVFoundation;
 
 @interface VAAudioController : UITableViewController
 
-@property (nonatomic) VKAudios *audios;
+@property(strong, nonatomic) VKRequest *audiosRequest;
 
 @end

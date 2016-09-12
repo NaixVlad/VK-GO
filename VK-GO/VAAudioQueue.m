@@ -47,10 +47,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    //
-}
 
 - (void)setQueueItems:(NSMutableArray *)items {
     
@@ -191,8 +187,7 @@
             
             //            [self.feedbackTimer resumeTimer];
         }
-        
-        //self.queuePlayer = [[VAAudioPlayback alloc] initWithItem:item];
+
         self.queuePlayer = [[VAAudioPlayback alloc] init];
         [self.queuePlayer setUpItem:item];
         [self.queuePlayer play];
