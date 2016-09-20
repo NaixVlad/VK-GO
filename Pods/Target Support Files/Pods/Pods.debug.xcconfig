@@ -1,0 +1,5 @@
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/FrameAccessor" "${PODS_ROOT}/Headers/Public/Masonry" "${PODS_ROOT}/Headers/Public/SWRevealViewController" "${PODS_ROOT}/Headers/Public/VK-ios-sdk"
+OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/FrameAccessor" -isystem "${PODS_ROOT}/Headers/Public/Masonry" -isystem "${PODS_ROOT}/Headers/Public/SWRevealViewController" -isystem "${PODS_ROOT}/Headers/Public/VK-ios-sdk"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"AFNetworking" -l"FrameAccessor" -l"Masonry" -l"SWRevealViewController" -l"VK-ios-sdk" -framework "CoreGraphics" -framework "Foundation" -framework "MobileCoreServices" -framework "SafariServices" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
+PODS_ROOT = ${SRCROOT}/Pods
