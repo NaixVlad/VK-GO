@@ -34,10 +34,10 @@ typedef NS_ENUM(NSInteger, VAAudioStatus) {
 
 - (instancetype)init;
 
-@property (nonatomic) AVPlayer *player;
+@property (strong, nonatomic) AVPlayer *player;
 @property (nonatomic) VAAudioStatus status;
 
-@property (nonatomic) VAAudio *currentItem;
+@property (strong, nonatomic) VAAudio *currentItem;
 
 - (void)setUpItem:(VAAudio *)item;
 - (void)play;

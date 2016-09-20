@@ -1,13 +1,15 @@
 //
-//  VASettingsController.m
+//  VASection.m
 //  VK-GO
 //
 //  Created by Vladislav Andreev on 12.09.16.
 //  Copyright © 2016 Vladislav Andreev. All rights reserved.
 //
 
-#import "VASettingsController.h"
+#import "VASection.h"
 
-@implementation VASettingsController
+@implementation VASection
+
+
 
 @end

@@ -7,11 +7,13 @@
 //
 
 #import "VAAudioController.h"
-
+#import "VAAudioPlayerController.h"
 #import "VAAudioManager.h"
 
+static NSString *const RecomendationsRequest = @"audio.getRecommendations";
+static NSString *const SearchRequest = @"audio.search";
 
-@interface VAAudioController ()
+@interface VAAudioController () <UISearchBarDelegate>
 
 @property(strong, nonatomic) VKAudios *audios;
 
@@ -21,19 +23,23 @@
 
 @implementation VAAudioController
 
+#pragma mark - Lifecycle
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
+    
+    
 
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self loadAudios];
-    });
-    
+    [self loadAudios];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(changePlayIcon:) name:@"VAAudioChange" object:nil];
-                  
+    
 }
 
 - (void)dealloc
@@ -50,26 +56,33 @@
 
 - (void) changePlayIcon: (NSNotification *) notification {
     
-    static NSInteger row;
-    
-    NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:row inSection: 0];
-    
-    [self.tableView deselectRowAtIndexPath:oldIndexPath animated:YES];
-    
-    UITableViewCell *oldCell = [self.tableView cellForRowAtIndexPath:oldIndexPath];
-    oldCell.imageView.image = [UIImage imageNamed:@"playButton"];
+    for (int i = 0; i < [self.audios count]; i++) {
+
+        NSIndexPath *oldIndexPath = [NSIndexPath indexPathForRow:i inSection: 0];
+        
+        [self.tableView deselectRowAtIndexPath:oldIndexPath animated:YES];
+        
+        UITableViewCell *oldCell = [self.tableView cellForRowAtIndexPath:oldIndexPath];
+        oldCell.imageView.image = [UIImage imageNamed:@"playButton"];
+    }
     
     VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
     
-    row = [queue indexOfCurrentItem];
+    VAAudio *currentItemInQueue = [queue getCurrentItem];
+    VAAudio *currentItemInTableView = [self.audios.items objectAtIndex:[queue indexOfCurrentItem]];
     
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection: 0];
+    if ([currentItemInQueue isEqual:currentItemInTableView]){
     
-    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    
-    UITableViewCell *newCell = [self.tableView cellForRowAtIndexPath:indexPath];
-    newCell.imageView.image = [UIImage imageNamed:@"pauseButton"];
-    
+        NSInteger row = [queue indexOfCurrentItem];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection: 0];
+        
+        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        
+        UITableViewCell *newCell = [self.tableView cellForRowAtIndexPath:indexPath];
+        newCell.imageView.image = [UIImage imageNamed:@"pauseButton"];
+        
+    }
 
 }
 
@@ -79,18 +92,20 @@
     
     __block NSMutableArray *audiosArray;
     
-    if (!self.audiosRequest) {
-        
-        VKUser *localUser = [[VKSdk accessToken] localUser];
+    VKUser *localUser = [[VKSdk accessToken] localUser];
+    if ([self.navigationController.restorationIdentifier isEqual: @"recomendations"]) {
+        self.audiosRequest = [VKApi requestWithMethod:RecomendationsRequest andParameters:@{@"user_id" : localUser.id}];
+        self.navigationItem.title = @"Рекомендации";
+    } else if ([self.navigationController.restorationIdentifier isEqual: @"myMusic"]) {
         self.audiosRequest = [VKApi requestWithMethod:@"audio.get" andParameters:@{@"owner_id" : localUser.id}];
-        
+        self.navigationItem.title = @"Мои аудиозаписи";
     }
     
     self.audiosRequest.waitUntilDone = YES;
     
     [self.audiosRequest executeWithResultBlock:^(VKResponse *response) {
         
-        audiosArray = [[NSMutableArray alloc] initWithArray:[response.json objectForKey:@"items"]];
+        audiosArray = [response.json objectForKey:@"items"];
 
     } errorBlock:^(NSError *error) {
         NSLog(@"%@", error.localizedDescription);
@@ -99,12 +114,37 @@
     
     self.audios = [[VKAudios alloc] initWithArray:audiosArray objectClass:[VAAudio class]];
     
-    [[VAAudioQueue sharedQueueManager] setQueueItems: self.audios.items];
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadData];
     });
 
+
+}
+
+- (void)searchAudiosForString: (NSString *) searchString {
+    
+    __block NSMutableArray *audiosArray;
+
+    VKRequest *searchRequest = [VKApi requestWithMethod:SearchRequest andParameters:@{@"q" : searchString}];
+    searchRequest.waitUntilDone = YES;
+
+    [searchRequest executeWithResultBlock:^(VKResponse *response) {
+        
+        audiosArray = [response.json objectForKey:@"items"];
+        
+    } errorBlock:^(NSError *error) {
+        NSLog(@"%@", error.localizedDescription);
+    }];
+    
+    
+    self.audios = [[VKAudios alloc] initWithArray:audiosArray objectClass:[VAAudio class]];
+    
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
+    
 }
 
 
@@ -119,9 +159,14 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *identifier = @"songIdentidier";
+    static NSString* identifier = @"Cell";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+    }
+
     
     VKAudio *audio = [[VKAudio alloc] init];
     
@@ -131,7 +176,20 @@
     
     cell.detailTextLabel.text = audio.artist;
     
-    cell.imageView.image = [UIImage imageNamed:@"playButton"];
+    VAAudio *currentItemInQueue = [[VAAudioQueue sharedQueueManager] getCurrentItem];
+    VAAudio *currentItemInTableView = [self.audios.items objectAtIndex:indexPath.row];
+    
+    if (!([currentItemInQueue isEqual:currentItemInTableView])){
+        
+        cell.imageView.image = [UIImage imageNamed:@"playButton"];
+        
+    } else {
+        
+        cell.imageView.image = [UIImage imageNamed:@"pauseButton"];
+        
+    }
+    
+    
     
     return cell;
 }
@@ -140,70 +198,52 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    //[tableView deselectRowAtIndexPath:indexPath animated:YES];
+    VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
+    
+    NSInteger indexOfCurrentItem = [queue indexOfCurrentItem];
+    NSMutableArray *playerQueue = [queue getQueueItems];
+    
+    BOOL isArraysDifferent = ![self.audios.items isEqual: playerQueue];
+    
+    if (isArraysDifferent) {
+        
+        [queue setQueueItems: self.audios.items];
 
-    [[VAAudioQueue sharedQueueManager] playItemAtIndex:indexPath.row];
+    }
     
-    /*
-    VKAudio *selectedAudio = [[VKAudio alloc] init];
+    if ((!(indexOfCurrentItem == indexPath.row)) || isArraysDifferent ) { 
+        
+        [queue playItemAtIndex:indexPath.row];
+        
+    }
     
-    selectedAudio = [self.audios objectAtIndex:indexPath.row];
-    
-    NSString *stringURL = selectedAudio.url;
-    
-    NSURL *url = [NSURL URLWithString: stringURL];
-    
-    [self playselectedsong:url];*/
+
+    [self performSegueWithIdentifier:@"OpenPlayer" sender:nil];
+
 
 }
 
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+#pragma mark - UISearchBarDelegate
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
+    [searchBar setShowsCancelButton:YES animated:YES];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    [self loadAudios];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
-#pragma mark - Navigation
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     
-    //VAAudioPlayerController *vc = [segue destinationViewController];
+    if (!([searchText length] == 0)) {
+        [self searchAudiosForString:searchText];
+    } else {
+        [self loadAudios];
+    }
     
-    //vc.queue = [[VAAudioQueue alloc]initWithItems:self.audios.items];
-    
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
 }
+
 
 
 @end

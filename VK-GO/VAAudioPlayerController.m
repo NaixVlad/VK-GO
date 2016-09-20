@@ -13,97 +13,65 @@
 
 @interface VAAudioPlayerController () <UIScrollViewDelegate>
 
-@property (nonatomic) UIImageView *albumCover;
-@property (nonatomic) UITextView *lyricsView;
-@property (nonatomic) NSString *lyrics;
-@property (nonatomic) CGPoint startPoint;
-@property (nonatomic) BOOL isRewinding;
-@property (nonatomic) CGFloat range;
-@property (nonatomic) CGFloat currentPositionInSeconds;
+@property (strong, nonatomic) UIImageView *albumCover;
+@property (strong, nonatomic) UITextView *lyricsView;
+@property (strong, nonatomic) NSString *lyrics;
+@property (nonatomic) BOOL isRewindingFlag;
+@property (nonatomic) CGFloat rangeOfOneMove;
 @property (nonatomic) NSInteger timeElapsed;
 
 @end
 
 @implementation VAAudioPlayerController
 
+#pragma mark - Lifecycle
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *backBtnImage = [UIImage imageNamed:@"playlist"];
+    [backBtn setBackgroundImage:backBtnImage forState:UIControlStateNormal];
+    [backBtn addTarget:self action:@selector(goBack) forControlEvents:UIControlEventTouchUpInside];
+    backBtn.frame = CGRectMake(0, 0, 30, 30);
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backBtn] ;
+    self.navigationItem.leftBarButtonItem = backButton;
+    
+    self.navigationController.navigationBar.barTintColor = [UIColor lightGrayColor];
+    
+    self.navigationController.toolbarHidden = YES;
+    
+
+}
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    //MPVolumeView;
     
     VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    [self configurateContent];
     
-    self.contentScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
-    
-    CGFloat width = self.view.width;
-    
-    //cover of album
-    
-    CGRect albumCoverRect = CGRectMake(0, 0, width, width);
-    
-    self.albumCover = [[UIImageView alloc] initWithFrame:albumCoverRect];
-    
-    self.albumCover.contentMode = UIViewContentModeScaleAspectFit;
-    
-    [self.contentScrollView addSubview:self.albumCover];
-    
-    //lyrics
-    
-    CGRect lyricsViewRect = CGRectMake(width, 0, width, width - self.pageControl.height);
-    
-    self.lyricsView = [[UITextView alloc] initWithFrame:lyricsViewRect];
-    
-    self.lyricsView.editable = NO;
-    
-    self.lyricsView.textAlignment = NSTextAlignmentNatural;
-    
-    [self.contentScrollView addSubview:self.lyricsView];
-    
-    self.lyricsView.backgroundColor = [UIColor clearColor];
-    
-    self.lyricsView.textColor = [UIColor whiteColor];
-    
-    [self.lyricsView setFont:[UIFont systemFontOfSize:15]];
-    
-    self.contentScrollView.contentSize = CGSizeMake(width * 2, width);
-    
-    // content
-    
-    [self updateContent];
-    
-    self.range = self.view.width / [queue.getCurrentItem.duration floatValue];
-    
-
-    
+    __weak VAAudioPlayerController* weakSelf = self;
     [queue listenFeedbackUpdatesWithBlock:^(VAAudio *item) {
+
+        if (!self.isRewindingFlag) {
+
+        self.moovingView.centerX = (self.rangeOfOneMove * item.timePlayed + self.currentTimeView.width / 2);
+            
+        self.timeElapsedView.width = self.moovingView.centerX;
+        self.timeElapsedLabel.text = [weakSelf timeFormatted:item.timePlayed];
         
-        if (!self.isRewinding) {
-            
-            self.timeElapsedLabel.text = [self timeFormatted: item.timePlayed];
-            
-            NSInteger timeRemaining = [item.duration integerValue] - item.timePlayed;
-            self.timeRemainingLabel.text = [NSString stringWithFormat:@"-%@", [self timeFormatted: timeRemaining]];
-            
-            self.currentPositionInSeconds = self.range * item.timePlayed;
-            
-            NSLog(@"%f", self.currentPositionInSeconds);
-            
-            [UIView animateWithDuration:0.f animations:^{
-                
-                //self.moovingView.x = self.currentPositionInSeconds - startPoint;
-                
-                self.timeElapsedView.width = self.currentPositionInSeconds;
-                self.moovingView.center = CGPointMake(self.timeElapsedView.width, self.moovingView.height/2);
-            }];
+        NSInteger timeRemaining = [item.duration integerValue] - item.timePlayed;
+        self.timeRemainingLabel.text = [NSString stringWithFormat:@"-%@", [weakSelf timeFormatted:timeRemaining]];
             
         }
-        
     } andFinishedBlock:^(VAAudio *nextItem) {
-        [self.playButton setImage:[UIImage imageNamed:@"pauseButton"] forState:UIControlStateNormal];
+        
     }];
+
+    
+    [self updateContent];
     
     //Gestures
     
@@ -131,18 +99,54 @@
     // Dispose of any resources that can be recreated.
 }
 
-//InterfaceOrientation
+#pragma mark - UI
 
-- (BOOL)shouldAutorotate {
-    return NO;
-}
-
-- (BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation{
-    return NO;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+- (void) configurateContent{
+    
+    CGFloat width = self.view.width;
+    
+    CGRect lyricsViewRect = CGRectMake(width, 0, width, width - self.pageControl.height);
+    CGRect albumCoverRect = CGRectMake(0, 0, width, width);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        self.audioTitleLabel.adjustsFontSizeToFitWidth = YES;
+        self.audioTitleLabel.minimumScaleFactor = 0.5;
+        self.artistLabel.adjustsFontSizeToFitWidth = YES;
+        self.artistLabel.minimumScaleFactor = 0.5;
+        
+        self.volumeSlider.tintColor = [UIColor redColor];
+        
+        self.automaticallyAdjustsScrollViewInsets = NO;
+        
+        self.contentScrollView.decelerationRate = UIScrollViewDecelerationRateFast;
+    
+        //cover of album
+        
+        self.albumCover = [[UIImageView alloc] initWithFrame:albumCoverRect];
+        
+        self.albumCover.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [self.contentScrollView addSubview:self.albumCover];
+        
+        //lyrics
+        
+        self.lyricsView = [[UITextView alloc] initWithFrame:lyricsViewRect];
+        
+        self.lyricsView.editable = NO;
+        
+        self.lyricsView.textAlignment = NSTextAlignmentNatural;
+        
+        [self.contentScrollView addSubview:self.lyricsView];
+        
+        self.lyricsView.backgroundColor = [UIColor clearColor];
+        
+        self.lyricsView.textColor = [UIColor whiteColor];
+        
+        [self.lyricsView setFont:[UIFont systemFontOfSize:15]];
+        
+        self.contentScrollView.contentSize = CGSizeMake(width * 2, width);
+    });
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -154,6 +158,10 @@
     
 }
 
+- (BOOL)hidesBottomBarWhenPushed {
+    return YES;
+}
+
 - (void)updateContent {
     
     VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
@@ -162,8 +170,19 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [audio fetchMetadata];
         [self loadLyrics];
-        
+     
+    
         dispatch_async(dispatch_get_main_queue(), ^{
+            
+            CGFloat widthOfAvailableMovement = self.view.width - self.currentTimeView.width;
+            CGFloat durationOfCurrentItem = [[[queue getCurrentItem]duration] floatValue];
+            self.rangeOfOneMove = widthOfAvailableMovement / durationOfCurrentItem;
+            
+            self.moovingView.centerX = 0.f + self.currentTimeView.width / 2;
+            self.timeElapsedView.width = self.moovingView.centerX;
+            
+            
+            
             self.lyricsView.text = self.lyrics;
             
             if (!queue.getCurrentItem.artwork) {
@@ -186,29 +205,28 @@
             [bcLyrics addSubview:visualEffectView];
             [self.contentScrollView insertSubview:bcLyrics belowSubview:self.lyricsView];
             
-            self.audioTitleLable.text = audio.title;
-            self.artistLabele.text = audio.artist;
+            self.audioTitleLabel.text = audio.title;
+            self.artistLabel.text = audio.artist;
             
             [self.playButton setImage: [UIImage imageNamed:@"pauseButton"] forState:UIControlStateNormal];
             
+            NSInteger indexOfCurrentItem = [queue indexOfCurrentItem] + 1;
+            NSUInteger coutOfAudiosInQueue = [[queue getQueueItems] count];
+            
+            self.navigationItem.title = [NSString stringWithFormat:@"%ld из %lu",
+                                         (long)indexOfCurrentItem, coutOfAudiosInQueue];
+        
         });
     });
-
+    
 }
 
 
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
-//player actions
+
+#pragma mark - Player Actions
 
 - (IBAction)peviousAudio:(UIButton *)sender {
     
@@ -240,7 +258,7 @@
     
 }
 
-//network
+#pragma mark - Networking
 
 - (void)loadLyrics {
     __block NSString *lyr;
@@ -266,13 +284,15 @@
     
 }
 
-//Gestures
+#pragma mark - Gestures
 
 - (void)handlePan: (UIPanGestureRecognizer *) panGesture {
     
     CGPoint touchLocation = [panGesture locationInView: self.view];
     
     VAAudioQueue *queue = [VAAudioQueue sharedQueueManager];
+    
+    static VAAudio *audio = nil;
     
     switch (panGesture.state) {
         case UIGestureRecognizerStatePossible:
@@ -281,48 +301,48 @@
             
         case UIGestureRecognizerStateBegan:
             
-            self.isRewinding = YES;
+            self.isRewindingFlag = YES;
+            audio = [queue getCurrentItem];
             
             break;
             
         case UIGestureRecognizerStateChanged:
 
-            self.moovingView.center = CGPointMake(touchLocation.x, self.moovingView.height/2);
+            self.moovingView.centerX = touchLocation.x;
+            self.timeElapsedView.width = self.moovingView.centerX;
             
-            self.timeElapsed = self.range * self.moovingView.x;
+            self.timeElapsed = (self.moovingView.centerX - self.currentTimeView.width / 2) / self.rangeOfOneMove;
             
-            self.timeElapsedLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted: self.timeElapsed ]];
+            self.timeElapsedLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted: self.timeElapsed]];
             
-            NSInteger timeRemaining = [queue.getCurrentItem.duration integerValue] - self.timeElapsed ;
+            NSInteger timeRemaining = [audio.duration integerValue] - self.timeElapsed;
+
             self.timeRemainingLabel.text = [NSString stringWithFormat:@"-%@", [self timeFormatted: timeRemaining]];
             
             break;
             
         case UIGestureRecognizerStateEnded:
-            
-            //[queue playAtSecond: (self.view.width / (self.moovingView.x + self.moovingView.width/2 + self.currentTimeView.width/2)) * self.range];
+
             [queue playAtSecond:self.timeElapsed ];
             
-            NSLog(@"%ld", (long)self.timeElapsed);
-            
-            self.isRewinding = NO;
+            self.isRewindingFlag = NO;
             
         case UIGestureRecognizerStateFailed:
             
-            self.isRewinding = NO;
+            self.isRewindingFlag = NO;
             
             break;
             
         case UIGestureRecognizerStateCancelled:
             
-            self.isRewinding = NO;
+            self.isRewindingFlag = NO;
             
             break;
     }
     
 }
 
-//helpers
+#pragma mark - Helpers
 
 
 - (NSString *)timeFormatted: (NSInteger) totalSeconds
@@ -339,5 +359,13 @@
     return [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)hours, (long)minutes, (long)seconds];
 }
 
+
+#pragma mark - Navigation
+
+- (void)goBack {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+}
 
 @end

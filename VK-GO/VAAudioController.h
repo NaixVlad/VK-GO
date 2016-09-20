@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "VKAudio.h"
+#import "VAAudio.h"
 #import "VKApi.h"
 @import AVFoundation;
 
 @interface VAAudioController : UITableViewController
 
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property(strong, nonatomic) VKRequest *audiosRequest;
 
 @end

@@ -54,12 +54,7 @@ NSString * const VAAudioPlaybackFinishedNotification = @"kVASoundPlaybackFinishe
     self.status = VAAudioStatusPlaying;
     
     self.currentItem = item;
-    
 
-    
-    
-    //self.currentItem.duration = @(CMTimeGetSeconds(self.player.currentItem.asset.duration));
-    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
@@ -162,7 +157,7 @@ NSString * const VAAudioPlaybackFinishedNotification = @"kVASoundPlaybackFinishe
 {
 
     [[NSNotificationCenter defaultCenter] postNotificationName:@"VAAudioChange" object:change];
-    
+
 }
 
 @end

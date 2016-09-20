@@ -21,7 +21,7 @@ typedef void (^itemFinishedBlock)(VAAudio *nextItem);
 
 @property (nonatomic) VAAudioStatus status;
 
-
+- (NSMutableArray*) getQueueItems;
 - (void) setQueueItems:(NSMutableArray *)items;
 - (void) addItem:(VAAudio *)item;
 - (void) addItem:(VAAudio *)item atIndex:(NSInteger)index;

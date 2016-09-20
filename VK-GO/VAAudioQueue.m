@@ -14,17 +14,17 @@
 
 @interface VAAudioQueue ()
 
-@property (nonatomic) VAAudioPlayback *queuePlayer;
-@property (nonatomic) NSMutableArray *items;
+@property (strong, nonatomic) VAAudioPlayback *queuePlayer;
+@property (strong, nonatomic) NSMutableArray *items;
 
-@property (nonatomic) NSTimer *feedbackTimer;
+@property (strong, nonatomic) NSTimer *feedbackTimer;
 
 @end
 
 
 @implementation VAAudioQueue
 
-+ (VAAudioQueue*) sharedQueueManager {
++ (VAAudioQueue*)sharedQueueManager {
     
     static VAAudioQueue* manager = nil;
 
@@ -42,12 +42,17 @@
     if (self) {
         
         self.queuePlayer = [[VAAudioPlayback alloc] init];
+
         
     }
     return self;
 }
 
-
+- (NSMutableArray*)getQueueItems {
+    
+    return self.items;
+    
+}
 - (void)setQueueItems:(NSMutableArray *)items {
     
     [self clearQueue];
@@ -93,17 +98,17 @@
     } repeats:YES];
 }
 
-- (void) addItem:(VAAudio *)item {
+- (void)addItem:(VAAudio *)item {
     
     [self addItem:item atIndex:self.items.count];
 }
 
-- (void) addItem:(VAAudio *)item atIndex:(NSInteger)index {
+- (void)addItem:(VAAudio *)item atIndex:(NSInteger)index {
     
     [self.items insertObject:item atIndex:(self.items.count >= index) ? self.items.count : index];
 }
 
-- (void) removeItem:(VAAudio *)item {
+- (void)removeItem:(VAAudio *)item {
     
     if ([self.items containsObject:item]) {
         
@@ -111,7 +116,7 @@
     }
 }
 
-- (void) removeItemAtIndex:(NSInteger)index {
+- (void)removeItemAtIndex:(NSInteger)index {
     
     if (self.items.count >= index) {
         
@@ -127,14 +132,14 @@
     }
 }
 
-- (void) clearQueue {
+- (void)clearQueue {
     
     [self.queuePlayer pause];
     [self.items removeAllObjects];
     [self.feedbackTimer pauseTimer];
 }
 
-- (void) playCurrentItem {
+- (void)playCurrentItem {
     
     [self.queuePlayer play];
     [[MPRemoteCommandCenter sharedCommandCenter] playCommand];
@@ -142,7 +147,7 @@
     [self.feedbackTimer resumeTimer];
 }
 
-- (void) pause {
+- (void)pause {
     
     [self.queuePlayer pause];
     [[MPRemoteCommandCenter sharedCommandCenter] pauseCommand];
@@ -150,7 +155,7 @@
     [self.feedbackTimer pauseTimer];
 }
 
-- (void) playNextItem {
+- (void)playNextItem {
     
     if ([self.items containsObject:self.queuePlayer.currentItem]) {
         
@@ -161,7 +166,7 @@
     }
 }
 
-- (void) playPreviousItem {
+- (void)playPreviousItem {
     
     if ([self.items containsObject:self.queuePlayer.currentItem] && [self.items indexOfObject:self.queuePlayer.currentItem] > 0) {
         
@@ -170,22 +175,24 @@
     }
 }
 
-- (void) playItemAtIndex:(NSInteger)index {
+- (void)playItemAtIndex:(NSInteger)index {
     
     if (self.items.count > index) {
         
-        [self playItem:self.items[index]];
+        [self playItem:[self.items objectAtIndex:index]];
     }
 }
 
 
--(void) playItem:(VAAudio *)item {
+-(void)playItem:(VAAudio *)item {
     
     if ([self.items containsObject:item]) {
         
-        if (self.queuePlayer.status == VAAudioStatusNotStarted || self.queuePlayer.status == VAAudioStatusPaused || self.queuePlayer.status == VAAudioStatusFinished) {
+        if (self.queuePlayer.status == VAAudioStatusNotStarted ||
+            self.queuePlayer.status == VAAudioStatusPaused ||
+            self.queuePlayer.status == VAAudioStatusFinished) {
             
-            //            [self.feedbackTimer resumeTimer];
+            [self.feedbackTimer resumeTimer];
         }
 
         self.queuePlayer = [[VAAudioPlayback alloc] init];
@@ -200,8 +207,6 @@
 - (void) playAtSecond: (NSInteger) second {
     
     [self.queuePlayer playAtSecond: second];
-    
-    NSLog(@"%ld", (long)second);
     
 }
 

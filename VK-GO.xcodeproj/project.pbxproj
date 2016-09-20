@@ -19,7 +19,9 @@
 		835A135C1D1A885F00AF0996 /* VAAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135B1D1A885E00AF0996 /* VAAudioQueue.m */; };
 		835A13601D1A89AB00AF0996 /* VAAudioPlayback.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A135F1D1A89AB00AF0996 /* VAAudioPlayback.m */; };
 		835A13641D1A8D6200AF0996 /* NSTimer+VAAudioManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */; };
-		83CEB9181D8693BC009084B9 /* VASettingsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB9171D8693BC009084B9 /* VASettingsController.m */; };
+		836F943B1D8F16E40089AE98 /* NSArray+VAFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 836F943A1D8F16E40089AE98 /* NSArray+VAFilter.m */; };
+		83CEB91B1D86A65C009084B9 /* VASection.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB91A1D86A65C009084B9 /* VASection.m */; };
+		83CEB91E1D89E57E009084B9 /* NSMutableArray+VASorting.m in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB91D1D89E57E009084B9 /* NSMutableArray+VASorting.m */; };
 		83F5BA101D1ADF0E00FEDD13 /* VAAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 83F5BA0F1D1ADF0E00FEDD13 /* VAAudio.m */; };
 		83F5BA121D1EF72F00FEDD13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83F5BA111D1EF72F00FEDD13 /* Assets.xcassets */; };
 		97B42611E83676BAF5A25E45 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F92817E5E45C682412A3A51 /* libPods.a */; };
@@ -52,8 +54,12 @@
 		835A13611D1A8C4000AF0996 /* VAAudioManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VAAudioManager.h; sourceTree = "<group>"; };
 		835A13621D1A8D6200AF0996 /* NSTimer+VAAudioManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSTimer+VAAudioManager.h"; sourceTree = "<group>"; };
 		835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+VAAudioManager.m"; sourceTree = "<group>"; };
-		83CEB9161D8693BC009084B9 /* VASettingsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VASettingsController.h; sourceTree = "<group>"; };
-		83CEB9171D8693BC009084B9 /* VASettingsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VASettingsController.m; sourceTree = "<group>"; };
+		836F94391D8F16E40089AE98 /* NSArray+VAFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+VAFilter.h"; sourceTree = "<group>"; };
+		836F943A1D8F16E40089AE98 /* NSArray+VAFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+VAFilter.m"; sourceTree = "<group>"; };
+		83CEB9191D86A65C009084B9 /* VASection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VASection.h; path = Assets.xcassets/VASection.h; sourceTree = "<group>"; };
+		83CEB91A1D86A65C009084B9 /* VASection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VASection.m; path = Assets.xcassets/VASection.m; sourceTree = "<group>"; };
+		83CEB91C1D89E57E009084B9 /* NSMutableArray+VASorting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+VASorting.h"; sourceTree = "<group>"; };
+		83CEB91D1D89E57E009084B9 /* NSMutableArray+VASorting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+VASorting.m"; sourceTree = "<group>"; };
 		83F5BA0E1D1ADF0E00FEDD13 /* VAAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VAAudio.h; sourceTree = "<group>"; };
 		83F5BA0F1D1ADF0E00FEDD13 /* VAAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VAAudio.m; sourceTree = "<group>"; };
 		83F5BA111D1EF72F00FEDD13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,10 +114,11 @@
 				835A13451D1571FC00AF0996 /* VAStartScreen.m */,
 				835A134C1D17BB3400AF0996 /* VAFriendsController.h */,
 				835A134D1D17BB3500AF0996 /* VAFriendsController.m */,
+				836F943C1D8F16EC0089AE98 /* Array */,
+				83CEB9191D86A65C009084B9 /* VASection.h */,
+				83CEB91A1D86A65C009084B9 /* VASection.m */,
 				835A13521D18864800AF0996 /* VAAudioController.h */,
 				835A13531D18864800AF0996 /* VAAudioController.m */,
-				83CEB9161D8693BC009084B9 /* VASettingsController.h */,
-				83CEB9171D8693BC009084B9 /* VASettingsController.m */,
 				835A13571D19ABE900AF0996 /* VAAudioPlayerController.h */,
 				835A13581D19ABE900AF0996 /* VAAudioPlayerController.m */,
 				835A135D1D1A895200AF0996 /* Audio */,
@@ -146,6 +153,17 @@
 				835A13631D1A8D6200AF0996 /* NSTimer+VAAudioManager.m */,
 			);
 			name = Audio;
+			sourceTree = "<group>";
+		};
+		836F943C1D8F16EC0089AE98 /* Array */ = {
+			isa = PBXGroup;
+			children = (
+				83CEB91C1D89E57E009084B9 /* NSMutableArray+VASorting.h */,
+				83CEB91D1D89E57E009084B9 /* NSMutableArray+VASorting.m */,
+				836F94391D8F16E40089AE98 /* NSArray+VAFilter.h */,
+				836F943A1D8F16E40089AE98 /* NSArray+VAFilter.m */,
+			);
+			name = Array;
 			sourceTree = "<group>";
 		};
 		DBAEC900CC04405E9C2A8324 /* Frameworks */ = {
@@ -279,8 +297,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83CEB91E1D89E57E009084B9 /* NSMutableArray+VASorting.m in Sources */,
 				835A13601D1A89AB00AF0996 /* VAAudioPlayback.m in Sources */,
 				835A134E1D17BB3500AF0996 /* VAFriendsController.m in Sources */,
+				83CEB91B1D86A65C009084B9 /* VASection.m in Sources */,
 				835A13641D1A8D6200AF0996 /* NSTimer+VAAudioManager.m in Sources */,
 				835A135C1D1A885F00AF0996 /* VAAudioQueue.m in Sources */,
 				835A132E1D15702100AF0996 /* AppDelegate.m in Sources */,
@@ -288,7 +308,7 @@
 				835A132B1D15702100AF0996 /* main.m in Sources */,
 				835A134A1D1571FC00AF0996 /* VAStartScreen.m in Sources */,
 				835A13541D18864800AF0996 /* VAAudioController.m in Sources */,
-				83CEB9181D8693BC009084B9 /* VASettingsController.m in Sources */,
+				836F943B1D8F16E40089AE98 /* NSArray+VAFilter.m in Sources */,
 				83F5BA101D1ADF0E00FEDD13 /* VAAudio.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

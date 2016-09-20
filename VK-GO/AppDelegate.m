@@ -51,7 +51,7 @@
     return YES;
 }
 
-
+/*
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     // Get topmost/visible view controller
     UIViewController *currentViewController = [self topViewController];
@@ -83,6 +83,6 @@
     } else {
         return rootViewController;
     }
-}
+}*/
 
 @end
